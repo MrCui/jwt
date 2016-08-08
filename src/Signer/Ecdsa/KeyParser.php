@@ -13,7 +13,7 @@ use InvalidArgumentException;
 use Lcobucci\JWT\Signer\Key;
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
-use Mdanter\Ecc\Math\MathAdapterInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Serializer\PrivateKey\DerPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\PemPrivateKeySerializer;
 use Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface;
@@ -22,8 +22,6 @@ use Mdanter\Ecc\Serializer\PublicKey\PemPublicKeySerializer;
 use Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface;
 
 /**
- * Base class for ECDSA signers
- *
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 3.0.4
  */
@@ -40,17 +38,22 @@ class KeyParser
     private $publicKeySerializer;
 
     /**
-     * @param MathAdapterInterface $adapter
+     * @param GmpMathInterface $adapter
      * @param PrivateKeySerializerInterface $privateKeySerializer
      * @param PublicKeySerializerInterface $publicKeySerializer
      */
     public function __construct(
-        MathAdapterInterface $adapter,
+        GmpMathInterface $adapter,
         PrivateKeySerializerInterface $privateKeySerializer = null,
         PublicKeySerializerInterface $publicKeySerializer = null
     ) {
-        $this->privateKeySerializer = $privateKeySerializer ?: new PemPrivateKeySerializer(new DerPrivateKeySerializer($adapter));
-        $this->publicKeySerializer = $publicKeySerializer ?: new PemPublicKeySerializer(new DerPublicKeySerializer($adapter));
+        $this->publicKeySerializer = $publicKeySerializer ?: new PemPublicKeySerializer(
+            new DerPublicKeySerializer($adapter)
+        );
+
+        $this->privateKeySerializer = $privateKeySerializer ?: new PemPrivateKeySerializer(
+            new DerPrivateKeySerializer($adapter, $this->publicKeySerializer)
+        );
     }
 
     /**

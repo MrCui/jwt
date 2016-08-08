@@ -13,50 +13,38 @@ namespace Lcobucci\JWT\Signer\Ecdsa;
  * @author Luís Otávio Cobucci Oblonczyk <lcobucci@gmail.com>
  * @since 2.1.0
  */
-class Sha384Test extends \PHPUnit_Framework_TestCase
+class Sha384Test extends BaseTestCase
 {
     /**
      * @test
      *
      * @uses Lcobucci\JWT\Signer\Ecdsa
-     * @uses Lcobucci\JWT\Signer\Ecdsa\KeyParser
      *
      * @covers Lcobucci\JWT\Signer\Ecdsa\Sha384::getAlgorithmId
      */
     public function getAlgorithmIdMustBeCorrect()
     {
-        $signer = new Sha384();
-
-        $this->assertEquals('ES384', $signer->getAlgorithmId());
+        $this->assertEquals('ES384', $this->getSigner()->getAlgorithmId());
     }
 
     /**
      * @test
      *
      * @uses Lcobucci\JWT\Signer\Ecdsa
-     * @uses Lcobucci\JWT\Signer\Ecdsa\KeyParser
      *
      * @covers Lcobucci\JWT\Signer\Ecdsa\Sha384::getAlgorithm
      */
     public function getAlgorithmMustBeCorrect()
     {
-        $signer = new Sha384();
-
-        $this->assertEquals('sha384', $signer->getAlgorithm());
+        $this->assertEquals('sha384', $this->getSigner()->getAlgorithm());
     }
 
-    /**
-     * @test
-     *
-     * @uses Lcobucci\JWT\Signer\Ecdsa
-     * @uses Lcobucci\JWT\Signer\Ecdsa\KeyParser
-     *
-     * @covers Lcobucci\JWT\Signer\Ecdsa\Sha384::getSignatureLength
-     */
-    public function getSignatureLengthMustBeCorrect()
+    private function getSigner(): Sha384
     {
-        $signer = new Sha384();
-
-        $this->assertEquals(96, $signer->getSignatureLength());
+        return new Sha384(
+            $this->mathInterface,
+            $this->adapter,
+            $this->keyParser
+        );
     }
 }

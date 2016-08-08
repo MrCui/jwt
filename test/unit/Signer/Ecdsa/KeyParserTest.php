@@ -11,6 +11,7 @@ namespace Lcobucci\JWT\Signer\Ecdsa;
 
 use Mdanter\Ecc\Crypto\Key\PrivateKeyInterface;
 use Mdanter\Ecc\Crypto\Key\PublicKeyInterface;
+use Mdanter\Ecc\Math\GmpMathInterface;
 use Mdanter\Ecc\Math\MathAdapterInterface;
 use Mdanter\Ecc\Serializer\PrivateKey\PrivateKeySerializerInterface;
 use Mdanter\Ecc\Serializer\PublicKey\PublicKeySerializerInterface;
@@ -23,7 +24,7 @@ use Lcobucci\JWT\Signer\Key;
 class KeyParserTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MathAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GmpMathInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $adapter;
 
@@ -42,7 +43,7 @@ class KeyParserTest extends \PHPUnit_Framework_TestCase
      */
     public function createDependencies()
     {
-        $this->adapter = $this->createMock(MathAdapterInterface::class);
+        $this->adapter = $this->createMock(GmpMathInterface::class);
         $this->privateKeySerializer = $this->createMock(PrivateKeySerializerInterface::class);
         $this->publicKeySerializer = $this->createMock(PublicKeySerializerInterface::class);
     }
